@@ -143,8 +143,8 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',-apple-system,sa
 </div>
 
 <div class="nav">
-  <button class="nav-btn active" onclick="go('tue')" id="nav-tue"><span class="nav-icon">💪</span>Tue · Upper</button>
-  <button class="nav-btn" onclick="go('thu')" id="nav-thu"><span class="nav-icon">🦵</span>Thu · Lower</button>
+  <button class="nav-btn active" onclick="go('thu')" id="nav-thu"><span class="nav-icon">🦵</span>Tue · Lower</button>
+  <button class="nav-btn" onclick="go('tue')" id="nav-tue"><span class="nav-icon">💪</span>Thu · Upper</button>
   <button class="nav-btn" onclick="go('sat')" id="nav-sat"><span class="nav-icon">⚡</span>Sat · Full</button>
   <button class="nav-btn" onclick="go('info')" id="nav-info"><span class="nav-icon">📋</span>Info</button>
 </div>
@@ -441,7 +441,7 @@ function showN(msg){
   setTimeout(function(){n.classList.remove('show');},2500);
 }
 
-render('tue');
+render('thu');
 </script>
 </body>
 </html>
