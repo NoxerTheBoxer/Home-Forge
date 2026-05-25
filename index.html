@@ -4,352 +4,346 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="HomeForge">
 <meta name="theme-color" content="#080808">
-<title>HomeForge</title>
+<title>HomeForge v4</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap');
 :root{
-  --bg:#080808;--s1:#111;--s2:#1a1a1a;--bd:#252525;
-  --tx:#f0f0f0;--mt:#777;--ac:#ff6b35;--ac2:#ff9a1f;
-  --grn:#32d74b;--red:#ff453a;--blu:#0a84ff;--pur:#bf5af2;
+  --bg:#080808;--s1:#101010;--s2:#181818;--bd:#242424;
+  --tx:#F2EFE9;--mt:#606060;--ac:#C8F135;--ac2:#A8D420;
+  --red:#FF4444;--blu:#4A9EFF;--pur:#BF7EFF;--ora:#FF8C42;
   --safe:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',-apple-system,sans-serif;font-size:15px;display:flex;flex-direction:column}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'DM Sans',-apple-system,sans-serif}
+.layout{display:flex;flex-direction:column;height:100%}
 
+/* TOPBAR */
 .topbar{
-  background:linear-gradient(135deg,#111 0%,#1a0a00 100%);
-  border-bottom:1px solid rgba(255,107,53,.15);
-  padding:14px 16px 10px;
-  padding-top:calc(14px + env(safe-area-inset-top,0px));
-  flex-shrink:0;position:relative;overflow:hidden;
+  background:var(--s1);
+  border-bottom:1px solid var(--bd);
+  padding:12px 16px;
+  padding-top:calc(12px + env(safe-area-inset-top,0px));
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
 }
-.topbar::before{content:'';position:absolute;top:-30px;right:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(255,107,53,.12) 0%,transparent 70%);pointer-events:none;}
-.topbar-row{display:flex;align-items:center;justify-content:space-between}
-.app-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.home-badge{font-size:10px;font-weight:600;background:rgba(255,107,53,.1);color:var(--ac);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,107,53,.25);letter-spacing:.05em}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--tx)}
+.logo span{color:var(--ac)}
+.ver-badge{font-size:10px;font-weight:600;background:rgba(200,241,53,.1);color:var(--ac);padding:3px 10px;border-radius:20px;border:1px solid rgba(200,241,53,.25);letter-spacing:.06em;font-family:'DM Mono',monospace}
 
+/* NAV */
 .nav{display:grid;grid-template-columns:repeat(4,1fr);background:var(--s1);border-bottom:1px solid var(--bd);flex-shrink:0}
-.nav-btn{padding:10px 4px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mt);background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;transition:color .2s}
-.nav-btn.active{color:var(--ac)}
-.nav-btn.active::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:2px}
-.nav-icon{font-size:18px}
+.nb{padding:10px 4px 8px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--mt);background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;transition:color .2s;font-family:'DM Sans',sans-serif}
+.nb.active{color:var(--ac)}
+.nb.active::after{content:'';position:absolute;bottom:0;left:15%;right:15%;height:2px;background:var(--ac);border-radius:2px}
+.ni{font-size:17px}
 
+/* MAIN */
 .main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(20px + var(--safe))}
-.panel{display:none;padding:12px 14px}
-.panel.active{display:block}
+.page{display:none;padding:12px 14px}
+.page.active{display:block}
 
-.sess-header{background:linear-gradient(135deg,var(--s1) 0%,#1a0a00 100%);border:1px solid rgba(255,107,53,.2);border-radius:14px;padding:16px;margin-bottom:14px;position:relative;overflow:hidden;}
-.sess-header::after{content:'';position:absolute;bottom:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,rgba(255,107,53,.08) 0%,transparent 70%);}
-.sess-day{font-family:'Bebas Neue',sans-serif;font-size:34px;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px;line-height:1}
-.sess-sub{font-size:12px;color:var(--mt);margin-top:3px;margin-bottom:10px}
-.eq-strip{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.eq-pill{font-size:10px;font-weight:600;padding:3px 8px;border-radius:12px;background:rgba(255,107,53,.08);color:var(--ac);border:1px solid rgba(255,107,53,.2)}
-.prog-label{font-size:11px;color:var(--mt);margin-bottom:4px;display:flex;justify-content:space-between}
+/* SECTION */
+.sec{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--mt);margin:14px 0 8px;display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace}
+.sec::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+/* SESSION HEADER */
+.sess-hd{border-radius:14px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
+.sess-hd.mon{background:linear-gradient(135deg,#0E1A00,#080808);border:1px solid rgba(200,241,53,.2)}
+.sess-hd.wed{background:linear-gradient(135deg,#001020,#080808);border:1px solid rgba(74,158,255,.2)}
+.sess-hd.fri{background:linear-gradient(135deg,#1A0A00,#080808);border:1px solid rgba(255,140,66,.2)}
+.sess-day{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:1px;line-height:1}
+.sess-day.mon{color:var(--ac)}
+.sess-day.wed{color:var(--blu)}
+.sess-day.fri{color:var(--ora)}
+.sess-title{font-size:12px;color:var(--mt);margin-top:2px;margin-bottom:10px;font-family:'DM Mono',monospace}
+.sess-pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--mt);margin-bottom:4px}
 .prog-bar{background:var(--bd);height:3px;border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:2px;transition:width .4s ease;width:0%}
+.prog-fill{height:100%;border-radius:2px;transition:width .5s ease;width:0%}
+.pf-mon{background:var(--ac)}
+.pf-wed{background:var(--blu)}
+.pf-fri{background:var(--ora)}
 
-.sec-head{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--mt);margin:14px 0 8px;padding:0 2px;display:flex;align-items:center;gap:8px}
-.sec-head::after{content:'';flex:1;height:1px;background:var(--bd)}
-
-.ex-card{background:var(--s1);border:1px solid var(--bd);border-radius:13px;margin-bottom:8px;overflow:hidden;transition:border-color .2s,opacity .2s}
-.ex-card.done{border-color:rgba(50,215,75,.4);opacity:.6}
-.ex-card.warmup{border-color:rgba(10,132,255,.15);background:rgba(10,132,255,.03)}
-.ex-card.primer{border-color:rgba(191,90,242,.15);background:rgba(191,90,242,.03)}
-.ex-card.superset{border-left:3px solid var(--ac2)}
-.ex-card.skill{border-color:rgba(50,215,75,.2);background:rgba(50,215,75,.03)}
-.ex-card.finisher{border-color:rgba(255,107,53,.2);background:rgba(255,107,53,.03)}
-
-.ex-main{display:grid;grid-template-columns:38px 1fr auto;gap:8px;align-items:start;padding:12px}
-.ex-num{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--bd);line-height:1;transition:color .2s}
-.ex-card.done .ex-num{color:var(--grn)}
-.ex-card.warmup .ex-num,.ex-card.primer .ex-num{font-size:18px}
-.ex-card.warmup .ex-num{color:rgba(10,132,255,.25)}
-.ex-card.primer .ex-num{color:rgba(191,90,242,.3)}
-.ex-card.skill .ex-num{color:rgba(50,215,75,.3);font-size:20px}
-
-.tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:5px;margin-right:3px;letter-spacing:.04em}
-.tag-wu{background:rgba(10,132,255,.1);color:#4da3ff;border:1px solid rgba(10,132,255,.2)}
-.tag-pr{background:rgba(191,90,242,.1);color:#d084f7;border:1px solid rgba(191,90,242,.2)}
-.tag-ss{background:rgba(255,154,31,.1);color:var(--ac2);border:1px solid rgba(255,154,31,.2)}
-.tag-sk{background:rgba(50,215,75,.1);color:var(--grn);border:1px solid rgba(50,215,75,.2)}
-.tag-fn{background:rgba(255,107,53,.1);color:var(--ac);border:1px solid rgba(255,107,53,.2)}
-.eq-tag{background:rgba(255,255,255,.06);color:#aaa;border:1px solid rgba(255,255,255,.1)}
-
-.ex-name{font-weight:600;font-size:14px;margin-bottom:2px;line-height:1.3}
-.ex-gym{font-size:11px;color:var(--mt);margin-bottom:3px;font-style:italic}
-.ex-note{font-size:12px;color:#aaa;line-height:1.45}
-
+/* EXERCISE CARDS */
+.ex{background:var(--s1);border:1px solid var(--bd);border-radius:13px;margin-bottom:8px;overflow:hidden;transition:opacity .2s,border-color .2s}
+.ex.done{opacity:.5;border-color:rgba(200,241,53,.3)}
+.ex.superset{border-left:3px solid var(--pur)}
+.ex.skill{border-color:rgba(200,241,53,.15);background:rgba(200,241,53,.02)}
+.ex.rehab{border-color:rgba(255,68,68,.15);background:rgba(255,68,68,.02)}
+.ex.mob{border-color:rgba(74,158,255,.12);background:rgba(74,158,255,.02)}
+.ex-inner{display:grid;grid-template-columns:36px 1fr auto;gap:8px;align-items:start;padding:12px}
+.ex-n{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--bd);line-height:1;transition:color .2s}
+.ex.done .ex-n{color:var(--ac)}
+.ex-body{}
+.tag{display:inline-block;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;margin-bottom:4px;margin-right:3px;font-family:'DM Mono',monospace;letter-spacing:.03em}
+.t-ss{background:rgba(191,126,255,.1);color:var(--pur);border:1px solid rgba(191,126,255,.2)}
+.t-sk{background:rgba(200,241,53,.08);color:var(--ac);border:1px solid rgba(200,241,53,.2)}
+.t-rh{background:rgba(255,68,68,.08);color:var(--red);border:1px solid rgba(255,68,68,.2)}
+.t-mb{background:rgba(74,158,255,.08);color:var(--blu);border:1px solid rgba(74,158,255,.2)}
+.t-pw{background:rgba(255,140,66,.1);color:var(--ora);border:1px solid rgba(255,140,66,.2)}
+.ex-name{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:3px;line-height:1.3}
+.ex-desc{font-size:12px;color:#888;line-height:1.5}
+.ex-prog{font-size:11px;color:var(--ac);margin-top:4px;font-style:italic}
 .ex-right{text-align:right;flex-shrink:0}
-.ex-sets{font-size:11px;color:var(--mt);margin-bottom:6px;white-space:nowrap;line-height:1.4}
-.rpe{display:inline-block;font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em}
-.rpe-n{background:rgba(255,69,58,.12);color:var(--red)}
-.rpe-c{background:rgba(255,154,31,.12);color:var(--ac2)}
-.rpe-y{background:rgba(50,215,75,.12);color:var(--grn)}
-.rpe-p{background:rgba(191,90,242,.12);color:var(--pur)}
+.ex-sets{font-size:11px;color:var(--mt);margin-bottom:6px;line-height:1.4;white-space:nowrap}
+.rpe{display:inline-block;font-size:9px;font-weight:600;padding:3px 7px;border-radius:4px;font-family:'DM Mono',monospace}
+.rpe-h{background:rgba(255,68,68,.1);color:var(--red)}
+.rpe-m{background:rgba(255,140,66,.1);color:var(--ora)}
+.rpe-l{background:rgba(200,241,53,.1);color:var(--ac)}
+.rpe-s{background:rgba(74,158,255,.1);color:var(--blu)}
+.ex-btns{display:flex;gap:6px;padding:0 12px 12px}
+.btn-rest{flex:1;padding:9px;font-size:12px;font-weight:600;border-radius:9px;border:1px solid rgba(200,241,53,.2);background:rgba(200,241,53,.06);color:var(--ac);cursor:pointer;transition:transform .1s}
+.btn-done{flex:1;padding:9px;font-size:12px;font-weight:600;border-radius:9px;border:1px solid var(--bd);background:var(--s2);color:var(--tx);cursor:pointer;transition:transform .1s}
+.btn-rest:active,.btn-done:active{transform:scale(.97)}
 
-.ex-actions{display:flex;gap:6px;padding:0 12px 12px}
-.ex-btn{flex:1;padding:9px;font-size:12px;font-weight:600;border-radius:9px;border:1px solid var(--bd);background:var(--s2);color:var(--tx);cursor:pointer;transition:transform .1s}
-.ex-btn:active{transform:scale(.97)}
-.rest-btn{background:rgba(255,107,53,.08);color:var(--ac);border-color:rgba(255,107,53,.2)}
-.done-btn{background:rgba(50,215,75,.08);color:var(--grn);border-color:rgba(50,215,75,.2)}
-
-.timer-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:100;flex-direction:column;align-items:center;justify-content:center;gap:24px}
-.timer-ov.show{display:flex}
-.t-label{font-size:12px;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:.12em}
-.t-circle{width:200px;height:200px;position:relative}
-.t-circle svg{width:200px;height:200px;transform:rotate(-90deg)}
+/* TIMER */
+.tov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:100;flex-direction:column;align-items:center;justify-content:center;gap:20px}
+.tov.show{display:flex}
+.t-lbl{font-size:11px;font-weight:600;color:var(--mt);text-transform:uppercase;letter-spacing:.1em;font-family:'DM Mono',monospace}
+.t-ring{width:200px;height:200px;position:relative}
+.t-ring svg{width:200px;height:200px;transform:rotate(-90deg)}
 .t-track{fill:none;stroke:#1a1a1a;stroke-width:8}
-.t-prog{fill:none;stroke:url(#tgrad);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
-.t-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.t-secs{font-family:'Bebas Neue',sans-serif;font-size:68px;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.t-next{font-size:11px;color:var(--mt);margin-top:4px;text-align:center;padding:0 20px}
-.t-btns{display:flex;gap:12px}
-.t-btn{padding:14px 28px;font-size:13px;font-weight:700;border-radius:12px;border:1px solid var(--bd);background:var(--s1);color:var(--tx);cursor:pointer;text-transform:uppercase;letter-spacing:.06em}
-.t-btn.skip{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#000;border:none}
+.t-arc{fill:none;stroke:var(--ac);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.t-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.t-secs{font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--ac);line-height:1}
+.t-next{font-size:11px;color:var(--mt);margin-top:2px;text-align:center;padding:0 16px}
+.t-btns{display:flex;gap:10px}
+.t-btn{padding:13px 26px;font-size:13px;font-weight:600;border-radius:12px;border:1px solid var(--bd);background:var(--s1);color:var(--tx);cursor:pointer;letter-spacing:.04em}
+.t-btn.go{background:var(--ac);color:#000;border:none}
 
-.info-card{background:var(--s1);border:1px solid var(--bd);border-radius:13px;padding:14px;margin-bottom:10px}
-.info-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-.info-body{font-size:13px;color:#aaa;line-height:1.6}
-.p-table{background:var(--s1);border:1px solid var(--bd);border-radius:13px;overflow:hidden;margin-bottom:10px}
-.p-head{padding:12px 14px;font-weight:700;font-size:13px;border-bottom:1px solid var(--bd)}
-.p-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--bd);font-size:13px;gap:12px}
-.p-row:last-child{border-bottom:none}
-.p-val{color:var(--mt);font-size:12px;text-align:right;flex-shrink:0}
-.wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:14px}
-.wk-day{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:7px 3px;text-align:center}
-.wk-dn{font-size:9px;font-weight:700;color:var(--mt);margin-bottom:4px;text-transform:uppercase}
-.wk-tag{font-size:8px;font-weight:700;padding:2px 3px;border-radius:3px;display:block;margin:1px auto;text-transform:uppercase}
-.wt-u{background:rgba(255,107,53,.2);color:var(--ac)}
-.wt-l{background:rgba(255,154,31,.2);color:var(--ac2)}
-.wt-f{background:rgba(50,215,75,.2);color:var(--grn)}
-.wt-b{background:rgba(10,132,255,.2);color:var(--blu)}
-.wt-r{background:rgba(255,255,255,.05);color:var(--mt)}
+/* OVERVIEW */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.stat{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:14px;text-align:center}
+.stat-v{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--ac);line-height:1;margin-bottom:4px}
+.stat-l{font-size:10px;color:var(--mt);text-transform:uppercase;letter-spacing:.06em;font-family:'DM Mono',monospace}
+.day-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.day-row:last-child{border-bottom:none}
+.day-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.day-info{}
+.day-name{font-size:13px;font-weight:600;color:var(--tx)}
+.day-sub{font-size:11px;color:var(--mt);margin-top:1px}
+.prog-list{margin-top:10px}
+.pl-item{margin-bottom:8px}
+.pl-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.pl-label{color:var(--tx);font-weight:500}
+.pl-val{color:var(--mt)}
+.pl-bar{background:var(--bd);height:4px;border-radius:2px;overflow:hidden}
+.pl-fill{height:100%;border-radius:2px}
 
-.notif{position:fixed;bottom:calc(24px + var(--safe));left:50%;transform:translateX(-50%) translateY(80px);background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;z-index:200;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+/* NOTIF */
+.notif{position:fixed;bottom:calc(20px + var(--safe));left:50%;transform:translateX(-50%) translateY(70px);background:var(--ac);color:#000;font-size:12px;font-weight:700;padding:9px 18px;border-radius:20px;z-index:200;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;font-family:'DM Mono',monospace}
 .notif.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
+<div class="layout">
 
 <div class="topbar">
-  <div class="topbar-row">
-    <div class="app-title">HomeForge</div>
-    <span class="home-badge">DB + Bar + Bands</span>
-  </div>
+  <div class="logo">Home<span>Forge</span></div>
+  <span class="ver-badge">v4 · MWF · Fresh</span>
 </div>
 
 <div class="nav">
-  <button class="nav-btn active" onclick="go('thu')" id="nav-thu"><span class="nav-icon">🦵</span>Tue · Lower</button>
-  <button class="nav-btn" onclick="go('tue')" id="nav-tue"><span class="nav-icon">💪</span>Thu · Upper</button>
-  <button class="nav-btn" onclick="go('sat')" id="nav-sat"><span class="nav-icon">⚡</span>Sat · Full</button>
-  <button class="nav-btn" onclick="go('info')" id="nav-info"><span class="nav-icon">📋</span>Info</button>
+  <button class="nb active" onclick="go('mon')" id="nb-mon"><span class="ni">🦵</span>Monday</button>
+  <button class="nb" onclick="go('wed')" id="nb-wed"><span class="ni">💪</span>Wednesday</button>
+  <button class="nb" onclick="go('fri')" id="nb-fri"><span class="ni">⚡</span>Friday</button>
+  <button class="nb" onclick="go('info')" id="nb-info"><span class="ni">📋</span>Info</button>
 </div>
 
 <div class="main" id="main"></div>
 
-<div class="timer-ov" id="tov">
-  <div class="t-label">Rest Timer</div>
-  <div class="t-circle">
-    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <defs><linearGradient id="tgrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#ff6b35"/><stop offset="100%" style="stop-color:#ff9a1f"/></linearGradient></defs>
-      <circle class="t-track" cx="100" cy="100" r="88"/>
-      <circle class="t-prog" id="tcirc" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="0"/>
-    </svg>
-    <div class="t-num">
-      <div class="t-secs" id="tdis">90</div>
-      <div class="t-next" id="tnxt">Next: —</div>
-    </div>
+<div class="tov" id="tov">
+  <div class="t-lbl">Rest Timer</div>
+  <div class="t-ring">
+    <svg viewBox="0 0 200 200"><circle class="t-track" cx="100" cy="100" r="88"/><circle class="t-arc" id="tarc" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="0"/></svg>
+    <div class="t-center"><div class="t-secs" id="tsec">90</div><div class="t-next" id="tnxt"></div></div>
   </div>
   <div class="t-btns">
     <button class="t-btn" onclick="stopT()">Cancel</button>
-    <button class="t-btn skip" onclick="stopT()">Skip ›</button>
+    <button class="t-btn go" onclick="stopT()">Skip ›</button>
   </div>
 </div>
 
 <div class="notif" id="notif"></div>
 
 <script>
-var cur='tue', done={}, tInt=null, tSecs=0, tTotal=0, C=553;
+var C=553, tInt=null, tSecs=0, tTotal=0;
+var done={};
 
-var DATA = {
-  tue: {
-    day:'UPPER BODY',
-    sub:'Tuesday · Pull-up bar + 2×35lb + 1×20lb + bands',
-    eq:['Pull-Up Bar','2×35lb DB','1×20lb DB','Resistance Bands','Towel'],
-    sections:[
-      {label:'Warm Up',items:[
-        {n:'Arm Circles',type:'warmup',gym:'Arm Circles',eq:'',d:'10 forward and backward. Progressively larger circles. Shoulder joint lubrication.',sets:'10 each direction',rpe:'rpe-p',rf:'Prep',rest:0,next:'Band Pull-Aparts'},
-        {n:'Band Pull-Aparts',type:'warmup',gym:'Band Pull-Aparts',eq:'Band',d:'Hold band at shoulder width, pull apart to chest squeezing rear delts. The real band version — not a towel substitute. 20 controlled reps.',sets:'20 reps',rpe:'rpe-p',rf:'Full stretch',rest:0,next:'Shoulder Dislocations'},
-        {n:'Shoulder Dislocations with Band',type:'warmup',gym:'Shoulder Dislocations',eq:'Band',d:'Wide grip on band, rotate overhead and behind in one slow arc. Develops overhead mobility your handstand work requires.',sets:'10 reps',rpe:'rpe-p',rf:'Wide grip',rest:0,next:'Wrist Circles'},
-        {n:'Wrist Circles',type:'warmup',gym:'Wrist Circles',eq:'',d:'10 each direction. Never skip — BJJ and pressing load wrists constantly.',sets:'10 each direction',rpe:'rpe-p',rf:'Full range',rest:0,next:'Dead Hang'},
-        {n:'Dead Hang',type:'warmup',gym:'Dead Hang',eq:'Pull-Up Bar',d:'Full bodyweight hang. Decompress spine, activate grip, stretch lats before pulling work.',sets:'45 seconds',rpe:'rpe-p',rf:'Relax shoulders',rest:0,next:'Handstand Wall Hold'}
-      ]},
-      {label:'Primer',items:[
-        {n:'Handstand Wall Hold',type:'primer',gym:'Handstand Wall Hold',eq:'',d:'Walk feet up wall until vertical. Ears between arms, core tight. Activates shoulder stabilisers and body tension before all upper body work.',sets:'3 × 30 seconds',rpe:'rpe-p',rf:'Body tight',rest:30,next:'Explosive Pull-Ups'},
-        {n:'Explosive High Pull-Ups',type:'primer',gym:'Explosive High Pull-Ups',eq:'Pull-Up Bar',d:'Maximum speed every rep. Chin well above the bar. Neurological potentiation before heavier pulling work.',sets:'2 × 3–5',rpe:'rpe-p',rf:'Max speed',rest:60,next:'Towel Pull-Ups'}
-      ]},
-      {label:'Main Pulling',items:[
-        {n:'Towel Pull-Ups',type:'main',gym:'Towel Weighted Pull-Ups',eq:'Pull-Up Bar + Towel',d:'Throw a towel over the bar and grip both ends — exact gi lapel grip demand. Add a 35lb dumbbell held between your feet or thighs for progressive overload. 3 to 4 second eccentric on every rep. Your most important BJJ-specific exercise in this programme.',sets:'4 × 5–8',rpe:'rpe-n',rf:'Never fail',rest:150,next:'DB Floor Press'}
-      ]},
-      {label:'Superset — Push + Shoulder Health',items:[
-        {n:'DB Floor Press',type:'superset',gym:'Incline DB Bench Press',eq:'2×35lb DB',d:'Lie on floor with 35lb dumbbells. Press from floor — the floor contact limits range of motion at the bottom which actually reduces shoulder stress. Superset immediately with band pull-aparts. Elbows at 45 degrees from your torso.',sets:'3 × 8–12',rpe:'rpe-c',rf:'1–2 RIR',rest:0,next:'Band Pull-Aparts'},
-        {n:'Band Pull-Aparts',type:'superset',gym:'Band Pull-Aparts',eq:'Band',d:'Immediately after DB floor press — zero rest. Rear delt activation between pressing sets. Full stretch at end range every rep.',sets:'3 × 20',rpe:'rpe-y',rf:'Full stretch',rest:90,next:'DB Row'}
-      ]},
-      {label:'Superset — Row + Face Pull',items:[
-        {n:'Single Arm DB Row',type:'superset',gym:'Barbell Rows',eq:'35lb DB',d:'Brace one hand and knee on a chair or sofa. Row the 35lb dumbbell from a dead hang to hip. Full stretch at bottom — do not cheat the range. 4 sets at 35lbs. When too easy hold both 35lb DBs alternating. Superset immediately with band face pulls.',sets:'4 × 10–12 each arm',rpe:'rpe-c',rf:'1–2 RIR',rest:0,next:'Band Face Pulls'},
-        {n:'Band Face Pulls',type:'superset',gym:'Face Pulls',eq:'Band',d:'Attach band to door handle or pull-up bar. Pull ends toward face with elbows flaring wide. Rear delt and external rotator health. Non-negotiable for shoulder longevity alongside heavy pressing and BJJ.',sets:'3 × 15–20',rpe:'rpe-y',rf:'Last set fail',rest:90,next:'Pike Push-Up'}
-      ]},
-      {label:'Direct Push',items:[
-        {n:'Pike Push-Up to Chair Dip',type:'main',gym:'Weighted Dips',eq:'Chair',d:'If bodyweight dips feel light put your feet elevated on a chair with hands on another chair behind you and place a 35lb dumbbell on your lap. Otherwise pike push-ups with feet elevated on a chair. Both replicate the pressing strength demand of weighted dips.',sets:'3 × 8–12',rpe:'rpe-c',rf:'1–2 RIR',rest:90,next:'DB Curl'}
-      ]},
-      {label:'Superset — Direct Arm Work',items:[
-        {n:'DB Incline Curl',type:'superset',gym:'Incline DB Curl',eq:'20lb DB',d:'Sit on a chair tilted back slightly — lean back against a wall at an angle. Hang the 20lb dumbbell at full arm extension, curl slowly. The stretch position at the bottom develops the long head of the bicep specifically.',sets:'2 × 12',rpe:'rpe-y',rf:'Last set fail',rest:0,next:'DB Hammer Curl'},
-        {n:'DB Hammer Curl',type:'superset',gym:'Hammer Curl',eq:'20lb DB',d:'Neutral grip on the 20lb dumbbell. Develops brachialis and forearm thickness for gi grip strength. Immediately after incline curls.',sets:'2 × 12',rpe:'rpe-y',rf:'Last set fail',rest:60,next:'Tuck Front Lever'}
-      ]},
-      {label:'Calisthenics Skill + Grip',items:[
-        {n:'Tuck Front Lever Hold',type:'skill',gym:'Tuck Front Lever Hold',eq:'Pull-Up Bar',d:'From bar bring knees to chest and hold horizontal. Accumulate 8 seconds per set. Progress: tuck → advanced tuck → one leg extended → full front lever.',sets:'3 × 8 seconds',rpe:'rpe-p',rf:'Accumulate',rest:60,next:'Towel Wringing'},
-        {n:'Towel Wringing Grip Work',type:'skill',gym:'Wrist Conditioning',eq:'Towel',d:'Take a dry towel and wring both hands in opposite directions as hard as possible. 30 seconds maximum effort. Direct gi grip endurance training. Alternatively hang from the bar with a towel grip for 30 second holds.',sets:'3 × 30 seconds',rpe:'rpe-y',rf:'Burn out',rest:0,next:'Done'}
-      ]}
+var DATA={
+  mon:{
+    label:'LOWER BODY',
+    sub:'Monday · Lower + Core · ~55 min · Train Fresh',
+    cls:'mon',
+    eq:['2×35lb DB','1×20lb DB','Pull-Up Bar','Sofa/Chair'],
+    exercises:[
+      {n:'Single Leg Romanian Deadlift',sets:'4×10 each leg',rpe:'rpe-m',rf:'1–2 RIR',rest:90,next:'Bulgarian Split Squat',
+       desc:'35lb DB in opposite hand. Push hips back — feel hamstring stretch at bottom. Full hip extension at top. 4 second eccentric every rep. Balance is the challenge at your bodyweight.',
+       prog:'Progress → both 35lb DBs · then add 2 sec pause at bottom'},
+      {n:'Bulgarian Split Squat',sets:'4×10 each leg',rpe:'rpe-m',rf:'1–2 RIR',rest:90,next:'Nordic Hamstring Curl',
+       desc:'Both 35lb DBs in hands. Rear foot on sofa. FRONT FOOT FLAT — no toes — protects big toe tendinitis. 3 second eccentric. 70lbs at single leg is serious work at 150lbs.',
+       prog:'Progress → deficit BSS front foot on book · then pause at bottom'},
+      {n:'Nordic Hamstring Curl',sets:'4×5 negatives',rpe:'rpe-h',rf:'6 sec down',rest:120,next:'Calf + Tibialis Superset',
+       desc:'Feet under sofa. Lower as slowly as possible — 6 full seconds. Catch with both hands. Push back up with hands. The single most important injury prevention exercise for your BJJ future.',
+       prog:'Progress → 8 sec negatives · reduce hand assist · full bodyweight no assist'},
+      {n:'Calf Raise + Tibialis Raise',sets:'3 supersets',rpe:'rpe-m',rf:'Superset',rest:60,next:'Single Leg Hip Thrust',
+       desc:'SUPERSET — zero rest between movements. Calf raise on stair edge with 35lb DB for balance — full range heel below step — 12 reps. Immediately into Tibialis raise — back against wall heels 6 inches out lift balls of feet — 1 sec hold — 20 reps. Big toe tendinitis note — reduce range if left toe is sharp.',
+       prog:'Progress → single leg calf raise · then weighted single leg',
+       tag:'ss'},
+      {n:'Single Leg Hip Thrust',sets:'4×12 each side',rpe:'rpe-m',rf:'2 sec squeeze',rest:60,next:'Pistol Squat Progression',
+       desc:'Upper back on sofa. One foot flat — drive through heel. Other leg extended or crossed. 2 second hard squeeze at top. No toe loading. Glute development directly transfers to hip extension in takedowns and bridging.',
+       prog:'Progress → 20lb DB on hip · then 35lb DB · then both 35s'},
+      {n:'Pistol Squat Progression',sets:'3×5 each leg',rpe:'rpe-m',rf:'Full depth',rest:90,next:'Dragon Flag',
+       desc:'Hold pull-up bar upright for balance. Lower to full depth on one leg. Stand back up. At 150lbs this progression moves fast. Focus on depth — thigh below parallel — before removing the hand assistance.',
+       prog:'Progress → unassisted · then 20lb DB held · then 35lb DB',
+       tag:'sk'},
+      {n:'Dragon Flag',sets:'4 sets to technical failure',rpe:'rpe-h',rf:'Tuck first',rest:90,next:'Dead Bug',
+       desc:'Lie on floor. Grip sofa legs behind head. Rigid body — lower as slowly as possible. TUCK first — knees to chest. When tuck is easy extend one leg. Primary core exercise. At 150lbs you will progress to full dragon flag faster than a heavier person.',
+       prog:'Progress → tuck → single leg extended → full → 2 sec pause at bottom'},
+      {n:'Dead Bug',sets:'3×10 each side',rpe:'rpe-l',rf:'3 sec eccentric',rest:45,next:'Neck Work',
+       desc:'Lying on back. Arms toward ceiling. Legs at 90 degrees. Lower opposite arm and leg slowly — keep lower back PRESSED to floor at all times. Develops deep core stability that dragon flag does not reach.',
+       prog:'Progress → extend fully · then add resistance band on feet'},
+      {n:'Manual Resistance Neck',sets:'3×15 all 4 directions',rpe:'rpe-l',rf:'Controlled',rest:0,next:'Done',
+       desc:'Palm against forehead — push against resistance — forward flexion. Back of head — extension. Left temple — left lateral. Right temple — right lateral. Flow through all four with no rest between directions. Non-negotiable from Day 1.',
+       prog:'Maintain forever — never skip this'}
     ]
   },
-
-  thu: {
-    day:'LOWER BODY',
-    sub:'Thursday · Pull-up bar + 2×35lb + 1×20lb + bands',
-    eq:['Pull-Up Bar','2×35lb DB','1×20lb DB','Chair or Sofa','Resistance Band'],
-    sections:[
-      {label:'Warm Up',items:[
-        {n:'90/90 Hip Stretch',type:'warmup',gym:'90/90 Hip Stretch',eq:'',d:'Most important BJJ mobility exercise. Both legs at 90 degrees. 2 minutes each side. Breathe into the stretch.',sets:'2 min each side',rpe:'rpe-p',rf:'Sink deep',rest:0,next:'Hip Circles'},
-        {n:'Hip Circles',type:'warmup',gym:'Hip Circles',eq:'',d:'Standing on one leg, trace large circles with raised knee.',sets:'10 each direction each leg',rpe:'rpe-p',rf:'Full range',rest:0,next:'Leg Swings'},
-        {n:'Leg Swings',type:'warmup',gym:'Leg Swings',eq:'',d:'Hold wall, swing leg forward and back through full range.',sets:'15 each leg',rpe:'rpe-p',rf:'Full range',rest:0,next:'Deep Squat Hold'},
-        {n:'Deep Squat Hold',type:'warmup',gym:'Deep Squat Hold',eq:'',d:'Full depth squat heels flat, elbows pushing knees out. Hold at bottom for ankle dorsiflexion.',sets:'60 seconds',rpe:'rpe-p',rf:'Heels flat',rest:0,next:'Ankle Circles'},
-        {n:'Ankle Circles',type:'warmup',gym:'Ankle Circles',eq:'',d:'10 each direction.',sets:'10 each direction',rpe:'rpe-p',rf:'Full range',rest:0,next:'Goblet Squat Primer'}
-      ]},
-      {label:'Primer',items:[
-        {n:'Goblet Squat with Pause',type:'primer',gym:'Goblet Squat with Pause',eq:'20lb DB',d:'Hold 20lb dumbbell at chest. 3 second pause at bottom every rep. Grooves the squat pattern. Elbows up, chest tall, heels flat.',sets:'2 × 5',rpe:'rpe-p',rf:'Perfect form',rest:60,next:'DB Goblet Squat'}
-      ]},
-      {label:'Main Work',items:[
-        {n:'DB Goblet Squat',type:'main',gym:'Barbell Front Squat',eq:'35lb DB',d:'Hold a 35lb dumbbell at your chest goblet style. Full depth every rep — thighs below parallel. When 35lbs becomes easy hold both 35lb DBs in a front rack position — 70lbs total at chest. This is a genuine load that challenges your legs meaningfully. Upright torso maintained by the front loading.',sets:'4 × 8–12',rpe:'rpe-n',rf:'Never fail',rest:180,next:'DB Romanian Deadlift'},
-        {n:'DB Romanian Deadlift',type:'main',gym:'Romanian Deadlift',eq:'2×35lb DB',d:'Both 35lb dumbbells in hands, hinge at hip, feel the hamstring stretch at the bottom. 3 second eccentric every rep. 70lbs total is a real training load — you will feel this. Keep back flat, soft bend in knees throughout.',sets:'3 × 8–10',rpe:'rpe-c',rf:'1–2 RIR',rest:120,next:'Sofa Nordic Curl'},
-        {n:'Sofa Nordic Hamstring Curl',type:'main',gym:'Nordic Hamstring Curl',eq:'Sofa',d:'Kneel on mat and tuck feet under a heavy sofa or have someone hold your ankles. Lower body toward floor as slowly as possible — 5 to 8 seconds down. Catch yourself with hands. Drive back up using hands to assist. Identical to the gym Nordic. The single best hamstring injury prevention exercise available.',sets:'3 × 4–6 negatives',rpe:'rpe-c',rf:'As slow as possible',rest:120,next:'DB Bulgarian Split Squat'},
-        {n:'DB Bulgarian Split Squat',type:'main',gym:'Bulgarian Split Squat',eq:'2×35lb DB + Chair',d:'Rear foot elevated on chair. Hold 35lb dumbbells in each hand — 70lbs total. This is a serious weighted BSS. Front foot far enough forward that shin stays vertical. Control the descent fully.',sets:'3 × 8–10 each leg',rpe:'rpe-c',rf:'1–2 RIR',rest:90,next:'Tibialis Raise'}
-      ]},
-      {label:'Superset — Lower Leg',items:[
-        {n:'Tibialis Raise',type:'superset',gym:'Tibialis Raise',eq:'',d:'Back against wall, heels 6 inches out. Lift balls of feet as high as possible, 1 second hold. No equipment needed.',sets:'3 × 15–20',rpe:'rpe-y',rf:'Last set fail',rest:0,next:'DB Calf Raise'},
-        {n:'DB Calf Raise on Step',type:'superset',gym:'Standing Calf Raise',eq:'35lb DB + Step',d:'Hold a 35lb dumbbell in one hand for balance, stand on a stair step edge with one foot. Full range — deep stretch at bottom, full contraction at top. Switch hands each set. Immediately after tibialis raises.',sets:'3 × 15 each leg',rpe:'rpe-y',rf:'Last set fail',rest:60,next:'Dragon Flag'}
-      ]},
-      {label:'Core and Skill',items:[
-        {n:'Dragon Flag Progression',type:'skill',gym:'Dragon Flag Progression',eq:'Pull-Up Bar or Floor',d:'Lie on your back holding the base of the pull-up bar uprights or a heavy piece of furniture. Complete body tension — lower yourself maintaining a rigid straight line. Tuck variation first then progress.',sets:'3 sets to failure',rpe:'rpe-y',rf:'Failure',rest:90,next:'DB Russian Twist'},
-        {n:'DB Russian Twist',type:'main',gym:'Cable Woodchoppers or Russian Twists',eq:'20lb DB',d:'Sit with knees bent, hold 20lb dumbbell, rotate torso fully side to side. Feet slightly raised for increased difficulty. Rotational core strength for guard sweeps, throws, and BJJ scrambles.',sets:'3 × 12–15 each side',rpe:'rpe-y',rf:'Controlled',rest:60,next:'Neck Work'}
-      ]},
-      {label:'Neck — Non-Negotiable',items:[
-        {n:'Manual Resistance Neck Work',type:'main',gym:'Four-Way Neck Work',eq:'',d:'Forward flexion, extension, left lateral, right lateral. Place palm against head in each direction, push head against your hand resistance. 15 controlled reps each direction. No equipment beyond your own hand.',sets:'3 × 15 each direction',rpe:'rpe-y',rf:'Controlled',rest:60,next:'Done'}
-      ]}
+  wed:{
+    label:'UPPER BODY',
+    sub:'Wednesday · Upper + Calisthenics · ~55 min · Train Fresh',
+    cls:'wed',
+    eq:['2×35lb DB','1×20lb DB','Pull-Up Bar','Resistance Band','Towel'],
+    exercises:[
+      {n:'Weighted Pull-Up',sets:'4×max reps',rpe:'rpe-h',rf:'4 sec down',rest:120,next:'Towel Pull-Up Volume',
+       desc:'20lb dumbbell between feet. 4 second eccentric every rep. At 8–12 bodyweight pull-ups you are ready for weighted immediately. 20lbs makes your effective weight 170lbs. When you hit 8 clean reps with 20lbs step up to 35lbs.',
+       prog:'Progress → 20lb → 35lb → towel grip weighted → archer pull-up weighted'},
+      {n:'Towel Pull-Up — Volume',sets:'2×max reps',rpe:'rpe-m',rf:'3 sec down',rest:90,next:'Pike Push-Up + Band Pull-Apart',
+       desc:'Throw towel over bar — grip both ends. Bodyweight only — these follow your weighted sets. 3 second eccentric. The towel grip is 20–30% harder than regular pull-ups and directly develops the gi collar grip strength your BJJ will demand.',
+       prog:'Progress → longer towel for more instability · then single towel one hand'},
+      {n:'Pike Push-Up + Band Pull-Apart',sets:'4 supersets',rpe:'rpe-m',rf:'Superset',rest:90,next:'Single Arm DB Row',
+       desc:'SUPERSET — feet on sofa — hips high — head between hands at bottom — 3 sec eccentric — max reps. Immediately into band pull-aparts — 25 reps — arms straight — full stretch. At 150lbs your pike push-up will progress to wall handstand push-up negatives within weeks.',
+       prog:'Progress → feet higher on wall → wall HSPU negative → wall HSPU',
+       tag:'ss'},
+      {n:'Single Arm DB Row',sets:'4×12 each arm',rpe:'rpe-m',rf:'Dead stop',rest:60,next:'Floor Press',
+       desc:'35lb DB. Brace knee and hand on sofa. DEAD STOP at floor every single rep — no bouncing. Full scapular stretch at bottom. Full retraction at top. 3 second eccentric. 1 second pause at top. The dead stop makes 35lbs genuinely challenging.',
+       prog:'Progress → pause 2 sec at top · then both DBs alternating'},
+      {n:'Floor Press',sets:'3×12',rpe:'rpe-m',rf:'2 sec pause',rest:90,next:'Front Lever Progression',
+       desc:'Both 35lb DBs. Elbows 45 degrees from torso. 3 second eccentric. 2 second PAUSE at floor — arms resting — then press. The dead stop eliminates the stretch reflex. 70lbs with a pause is real pressing work.',
+       prog:'Progress → 3 sec pause · then single arm 35lb floor press'},
+      {n:'Front Lever Progression',sets:'4×10 sec accumulation',rpe:'rpe-l',rf:'Accumulate',rest:75,next:'Hollow to Arch Body',
+       desc:'From pull-up bar. Tuck hold — knees to chest — hold horizontal. Each set accumulate 10 seconds total. At 150lbs your front lever will progress significantly faster than a heavier person. Advanced tuck within a month. Single leg extended within 2–3 months.',
+       prog:'Progress → tuck → advanced tuck → single leg → straddle → full',
+       tag:'sk'},
+      {n:'Hollow Body + Arch Hold',sets:'3 rounds',rpe:'rpe-l',rf:'30+15 sec',rest:60,next:'Grip Endurance',
+       desc:'Hollow body — arms and legs extended — lower back pressed to floor — hold 30 seconds. Immediately flip face down — arch body — arms and legs lifted — hold 15 seconds. Develops the full-body tension that makes every push and pull movement stronger.',
+       prog:'Progress → increase hold durations · then add small weight to hands'},
+      {n:'Towel Hang — Grip Endurance',sets:'2×max time',rpe:'rpe-h',rf:'Do not let go',rest:90,next:'Done',
+       desc:'Hang from towel over pull-up bar. Do not let go until you must. Directly trains the grip endurance your gi BJJ demands in the final rounds when everyone else is losing their grip. Your forearms will burn. That is the point.',
+       prog:'Progress → longer hang time · then single towel one arm · then single arm hang'}
     ]
   },
-
-  sat: {
-    day:'FULL BODY',
-    sub:'Saturday · Pull-up bar + 2×35lb + 1×20lb + bands',
-    eq:['Pull-Up Bar','2×35lb DB','1×20lb DB','Band','Chair','Towel'],
-    sections:[
-      {label:'Warm Up',items:[
-        {n:"World's Greatest Stretch",type:'warmup',gym:"World's Greatest Stretch",eq:'',d:'From lunge: same-side hand inside front foot, rotate opposite arm to ceiling, drop elbow to floor, straighten front leg. Hip flexor, thoracic, and hamstring all in one.',sets:'5 each side',rpe:'rpe-p',rf:'Slow',rest:0,next:'Hip Flexor Lunge'},
-        {n:'Hip Flexor Lunge Hold',type:'warmup',gym:'Hip Flexor Lunge',eq:'',d:'Kneeling lunge, drive hips forward, hold. Essential before explosive lower body work.',sets:'60 sec each side',rpe:'rpe-p',rf:'Feel it',rest:0,next:'Thoracic Rotation'},
-        {n:'Thoracic Rotation',type:'warmup',gym:'Thoracic Rotation',eq:'',d:'Quadruped, rotate thoracic spine as far as possible each direction.',sets:'10 each side',rpe:'rpe-p',rf:'Full rotation',rest:0,next:'Band Pull-Aparts'},
-        {n:'Band Pull-Aparts',type:'warmup',gym:'Band Pull-Aparts',eq:'Band',d:'20 reps. Shoulder prep before overhead DB work.',sets:'20 reps',rpe:'rpe-p',rf:'Full stretch',rest:0,next:'Turkish Get-Up'}
-      ]},
-      {label:'Primer',items:[
-        {n:'DB Turkish Get-Up',type:'primer',gym:'Turkish Get-Up',eq:'20lb DB',d:'Hold 20lb dumbbell overhead — the real weighted version. Lie to standing while keeping the DB pressed overhead throughout. Every phase deliberate and controlled. This is genuinely challenging at 20lbs for the full movement.',sets:'2 × 3 each side',rpe:'rpe-p',rf:'Perfect form',rest:60,next:'Broad Jump'}
-      ]},
-      {label:'Power — Maximum Intent',items:[
-        {n:'DB Power Jump Squat',type:'main',gym:'Hang Power Clean',eq:'2×35lb DB',d:'Hold 35lb dumbbells at sides, explosive squat jump landing softly. Maximum intent every rep — not conditioning work, pure power development. Full recovery between sets — 3 minutes. 70lbs total makes this a genuine loaded power exercise. Alternatively broad jumps with no weight for maximum distance if dumbbells feel too heavy for explosive work.',sets:'4 × 4–5',rpe:'rpe-n',rf:'Max power',rest:180,next:'DB Push Press'},
-        {n:'DB Push Press',type:'main',gym:'Push Press',eq:'2×35lb DB',d:'Both 35lb dumbbells at shoulders — 70lbs total. Use leg drive to initiate, press overhead. Same lower-to-upper power transfer as the barbell push press. Genuinely heavy overhead work.',sets:'3 × 6–8',rpe:'rpe-c',rf:'1–2 RIR',rest:150,next:'DB Suitcase Deadlift'}
-      ]},
-      {label:'Strength',items:[
-        {n:'DB Suitcase Deadlift',type:'main',gym:'Trap Bar Deadlift',eq:'2×35lb DB',d:'Both 35lb dumbbells held at sides, hinge at hip maintaining flat back, stand fully. 70lbs is a real load for a suitcase deadlift. When too light hold a loaded backpack on top or wear it. Closest home equivalent to the trap bar deadlift.',sets:'3 × 6–8',rpe:'rpe-n',rf:'Never fail',rest:180,next:"DB Farmer's Walk"},
-        {n:"DB Farmer's Walk",type:'main',gym:"Farmer's Walks",eq:'2×35lb DB',d:'Both 35lb dumbbells — the real thing. Walk as far as your space allows, turn and walk back. 70lbs total is legitimate farmer carry training. Grip endurance, traps, core, cardiovascular conditioning all simultaneously. Your last set should be genuinely hard to complete.',sets:"4 × 30–40m",rpe:'rpe-c',rf:'Heavy and upright',rest:90,next:'Tuck Front Lever'}
-      ]},
-      {label:'Superset — Calisthenics Skills',items:[
-        {n:'Tuck Front Lever Hold',type:'skill',gym:'Tuck Front Lever Hold',eq:'Pull-Up Bar',d:'Second front lever session of the week. Accumulate 8 seconds per set. Progress toward advanced tuck and single leg extended.',sets:'3 × 8 seconds',rpe:'rpe-p',rf:'Accumulate',rest:0,next:'Tuck Back Lever'},
-        {n:'Tuck Back Lever Hold',type:'skill',gym:'Tuck Back Lever Hold',eq:'Pull-Up Bar',d:'From hang, pull body horizontal behind bar in tuck position. Superset with front lever. Together build complete ring and bar strength toward human flag.',sets:'3 × 8 seconds',rpe:'rpe-p',rf:'Accumulate',rest:60,next:'Neck Work'}
-      ]},
-      {label:'Neck — Non-Negotiable',items:[
-        {n:'Manual Resistance Neck Work',type:'main',gym:'Four-Way Neck Work',eq:'',d:'Second neck session of the week. Forward flexion, extension, left lateral, right lateral with manual hand resistance. Twice weekly neck training produces rapid strength and resilience gains.',sets:'3 × 15 each direction',rpe:'rpe-y',rf:'Controlled',rest:60,next:'Zone 2 Finisher'}
-      ]},
-      {label:'Conditioning Finisher',items:[
-        {n:'Zone 2 Finisher',type:'finisher',gym:'Zone 2 Finisher',eq:'',d:'10 minutes at fully conversational pace. Outdoor jog, fast walk, or step-ups on a stair. Heart rate 65 to 70 percent maximum. Builds the aerobic recovery base that improves your BJJ gas tank across months.',sets:'10 minutes',rpe:'rpe-y',rf:'Conversational',rest:0,next:'Done'}
-      ]}
+  fri:{
+    label:'POWER + SKILL',
+    sub:'Friday · Power + Skill + Rehab · ~50 min · Train Fresh',
+    cls:'fri',
+    eq:['2×35lb DB','1×20lb DB','Pull-Up Bar'],
+    exercises:[
+      {n:'Broad Jump',sets:'5×4 reps',rpe:'rpe-h',rf:'Max distance',rest:120,next:'DB Push Press',
+       desc:'Full effort. Land softly. FULL recovery between reps — walk back slowly. This is power development not conditioning. The explosive hip extension here is identical to the hip drive in takedowns and guard sweeps. Every rep maximum intent.',
+       prog:'Progress → measure distance and beat it · then depth jump from step',
+       tag:'pw'},
+      {n:'DB Push Press',sets:'4×6',rpe:'rpe-h',rf:'Explosive',rest:120,next:'DB Suitcase Deadlift',
+       desc:'Both 35lb DBs at shoulders. Dip with legs — drive hips — press overhead explosively. The leg drive is the point — training the kinetic chain from ground to overhead. At 150lbs pressing 70lbs overhead is a genuine power movement.',
+       prog:'Progress → pause overhead 2 sec · then single arm alternating',
+       tag:'pw'},
+      {n:'DB Suitcase Deadlift',sets:'4×8',rpe:'rpe-m',rf:'Explosive up',rest:90,next:'Tiptoe Farmer Walk',
+       desc:'Both 35lb DBs at sides. 3 second eccentric. EXPLOSIVE concentric — drive the floor away. Full hip extension and glute squeeze at top. At 150lbs the 70lb suitcase DL with slow eccentric and explosive concentric develops serious posterior chain power.',
+       prog:'Progress → pause at bottom · then single leg version'},
+      {n:'Tiptoe Farmer Walk',sets:'5×30 metres',rpe:'rpe-m',rf:'Stay on toes',rest:75,next:'Turkish Get-Up',
+       desc:'Both 35lb DBs. RISE onto toes — walk the full distance on tiptoes only. Deliberate and controlled. Trains calf strength, balance, ankle stability, AND progressively loads and rehabilitates the big toe tendinitis. If left toe sharp pain — drop to flat foot for that set.',
+       prog:'Progress → increase distance · then increase pace · then single arm tiptoe'},
+      {n:'Turkish Get-Up',sets:'3×3 each side',rpe:'rpe-l',rf:'Perfect form',rest:0,next:'Tuck Back Lever',
+       desc:'20lb dumbbell overhead. Lie to standing while keeping DB pressed overhead throughout. No rushing between positions. Every position requires full core tension. At 150lbs the 20lb TGU is approximately 13% of your bodyweight overhead through a complex movement.',
+       prog:'Progress → 35lb DB TGU when 20lb feels fully controlled'},
+      {n:'Tuck Back Lever',sets:'3×8 sec accumulation',rpe:'rpe-l',rf:'Accumulate',rest:60,next:'Big Toe Rehab',
+       desc:'From pull-up bar. Pull body horizontal behind bar in tuck position. Accumulate 8 seconds per set. Pairs with Wednesday front lever. Together they develop complete ring and bar strength. At 150lbs this is achievable within the first month.',
+       prog:'Progress → tuck → advanced tuck → single leg → full back lever',
+       tag:'sk'},
+      {n:'Big Toe Tendinitis Rehab',sets:'Every Friday',rpe:'rpe-l',rf:'Non-negotiable',rest:0,next:'Hip 90/90 Mobility',
+       desc:'1. Seated toe extension stretch — pull big toe gently upward — hold 20 seconds — 3 times each foot. 2. Towel toe curl — scrunch towel with toes — 3×15 each foot. 3. Wall calf stretch — 2×30 seconds each side. Consistent weekly rehab prevents this becoming chronic when BJJ starts.',
+       tag:'rh'},
+      {n:'Hip 90/90 Mobility',sets:'2 min each side',rpe:'rpe-l',rf:'Breathe into it',rest:0,next:'Done',
+       desc:'Both legs at 90 degrees — front leg internally rotated — back leg externally rotated. Breathe and progressively sink deeper. Never force. This develops the hip external rotation that your guard work will demand. The most important BJJ mobility exercise available.',
+       prog:'Progress → weighted 90/90 with 10lb DB on knee · then transition between sides',
+       tag:'mb'}
     ]
   }
 };
 
-function countEx(sess){var t=0;DATA[sess].sections.forEach(function(s){s.items.forEach(function(i){if(i.type!=='warmup')t++;});});return t;}
-function countDone(sess){var t=0;DATA[sess].sections.forEach(function(s,si){s.items.forEach(function(i,ii){if(i.type!=='warmup'&&done[sess+'-'+si+'-'+ii])t++;});});return t;}
+function countEx(s){return DATA[s].exercises.length;}
+function countDone(s){
+  var t=0;
+  DATA[s].exercises.forEach(function(_,i){if(done[s+'-'+i])t++;});
+  return t;
+}
 
 function render(s){
   var main=document.getElementById('main');
   if(s==='info'){main.innerHTML=renderInfo();return;}
-  var d=DATA[s];if(!d)return;
+  var d=DATA[s];
   var tot=countEx(s),dn=countDone(s),pct=Math.round(dn/tot*100);
 
+  var clr=s==='mon'?'var(--ac)':s==='wed'?'var(--blu)':'var(--ora)';
+  var pfCls='pf-'+s;
+
   var h='<div style="padding:12px 14px">';
-  h+='<div class="sess-header">';
-  h+='<div class="sess-day">'+d.day+'</div>';
-  h+='<div class="sess-sub">'+d.sub+'</div>';
-  h+='<div class="eq-strip">';
-  d.eq.forEach(function(e){h+='<span class="eq-pill">'+e+'</span>';});
+  // Session header
+  h+='<div class="sess-hd '+s+'">';
+  h+='<div class="sess-day '+s+'">'+d.label+'</div>';
+  h+='<div class="sess-title">'+d.sub+'</div>';
+  h+='<div class="sess-pills">';
+  d.eq.forEach(function(e){h+='<span style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.05);color:var(--mt);border:1px solid var(--bd)">'+e+'</span>';});
   h+='</div>';
-  h+='<div class="prog-label"><span>Progress</span><span id="prog-lbl">'+dn+' / '+tot+'</span></div>';
-  h+='<div class="prog-bar"><div class="prog-fill" id="pfill" style="width:'+pct+'%"></div></div>';
+  h+='<div class="prog-row"><span>Progress</span><span id="plbl">'+dn+' / '+tot+'</span></div>';
+  h+='<div class="prog-bar"><div class="prog-fill '+pfCls+'" id="pfill" style="width:'+pct+'%"></div></div>';
   h+='</div>';
 
-  d.sections.forEach(function(sec,si){
-    h+='<div class="sec-head">'+sec.label+'</div>';
-    sec.items.forEach(function(item,ii){
-      var key=s+'-'+si+'-'+ii;
-      var isMain=item.type!=='warmup';
-      var isDone=done[key]?' done':'';
-      var cls='ex-card';
-      if(item.type==='warmup')cls+=' warmup';
-      else if(item.type==='primer')cls+=' primer';
-      else if(item.type==='superset')cls+=' superset';
-      else if(item.type==='skill')cls+=' skill';
-      else if(item.type==='finisher')cls+=' finisher';
+  // Exercises
+  d.exercises.forEach(function(ex,i){
+    var key=s+'-'+i;
+    var isDone=done[key]?' done':'';
+    var cls='ex';
+    if(ex.tag==='ss')cls+=' superset';
+    else if(ex.tag==='sk')cls+=' skill';
+    else if(ex.tag==='rh')cls+=' rehab';
+    else if(ex.tag==='mb')cls+=' mob';
+    cls+=isDone;
 
-      h+='<div id="ec'+key+'" class="'+cls+isDone+'">';
-      h+='<div class="ex-main">';
-      var num='';
-      if(item.type==='warmup')num='○';
-      else if(item.type==='primer')num='◈';
-      else if(item.type==='skill')num='★';
-      else if(item.type==='finisher')num='⟳';
-      else num=(ii+1);
-      h+='<div class="ex-num">'+num+'</div>';
-      h+='<div>';
-      if(item.type==='warmup')h+='<span class="tag tag-wu">Warm Up</span>';
-      else if(item.type==='primer')h+='<span class="tag tag-pr">Primer</span>';
-      else if(item.type==='superset')h+='<span class="tag tag-ss">Superset</span>';
-      else if(item.type==='skill')h+='<span class="tag tag-sk">Skill</span>';
-      else if(item.type==='finisher')h+='<span class="tag tag-fn">Finisher</span>';
-      if(item.eq)h+='<span class="tag eq-tag">'+item.eq+'</span>';
-      h+='<div class="ex-name">'+item.n+'</div>';
-      h+='<div class="ex-gym">Gym: '+item.gym+'</div>';
-      h+='<div class="ex-note">'+item.d+'</div>';
-      h+='</div>';
-      h+='<div class="ex-right"><div class="ex-sets">'+item.sets+'</div>';
-      h+='<span class="rpe '+item.rpe+'">'+item.rf+'</span></div>';
-      h+='</div>';
-      h+='<div class="ex-actions">';
-      if(item.rest>0){h+='<button class="ex-btn rest-btn" onclick="startT('+item.rest+',\''+item.next.replace(/'/g,"\\'")+'\')" >Rest '+fmtR(item.rest)+'</button>';}
-      else{h+='<button class="ex-btn" style="opacity:.35;cursor:default">No rest</button>';}
-      h+='<button class="ex-btn done-btn" onclick="markEx(\''+key+'\',\''+s+'\')">✓ Done</button>';
-      h+='</div></div>';
-    });
+    h+='<div id="ec'+key+'" class="'+cls+'">';
+    h+='<div class="ex-inner">';
+    h+='<div class="ex-n">'+(i+1)+'</div>';
+    h+='<div class="ex-body">';
+    if(ex.tag==='ss')h+='<span class="tag t-ss">Superset</span>';
+    if(ex.tag==='sk')h+='<span class="tag t-sk">Skill</span>';
+    if(ex.tag==='rh')h+='<span class="tag t-rh">Rehab</span>';
+    if(ex.tag==='mb')h+='<span class="tag t-mb">Mobility</span>';
+    if(ex.tag==='pw')h+='<span class="tag t-pw">Power</span>';
+    h+='<div class="ex-name">'+ex.n+'</div>';
+    h+='<div class="ex-desc">'+ex.desc+'</div>';
+    if(ex.prog)h+='<div class="ex-prog">↑ '+ex.prog+'</div>';
+    h+='</div>';
+    h+='<div class="ex-right"><div class="ex-sets">'+ex.sets+'</div><span class="rpe '+ex.rpe+'">'+ex.rf+'</span></div>';
+    h+='</div>';
+    h+='<div class="ex-btns">';
+    if(ex.rest>0){
+      h+='<button class="btn-rest" onclick="startT('+ex.rest+',\''+ex.next.replace(/'/g,"\\'")+'\')" >Rest '+fmtR(ex.rest)+'</button>';
+    }else{
+      h+='<button class="btn-rest" style="opacity:.25;cursor:default">No rest</button>';
+    }
+    h+='<button class="btn-done" onclick="markDone(\''+key+'\',\''+s+'\')">✓ Done</button>';
+    h+='</div></div>';
   });
   h+='</div>';
   main.innerHTML=h;
@@ -357,78 +351,95 @@ function render(s){
 
 function renderInfo(){
   return '<div style="padding:12px 14px">'+
-    '<div class="sec-head">Weekly Schedule</div>'+
-    '<div class="wk-grid">'+
-    '<div class="wk-day"><div class="wk-dn">Mon</div><span class="wk-tag wt-b">BJJ</span></div>'+
-    '<div class="wk-day"><div class="wk-dn">Tue</div><span class="wk-tag wt-u">Upper</span><span class="wk-tag wt-b">BJJ</span></div>'+
-    '<div class="wk-day"><div class="wk-dn">Wed</div><span class="wk-tag wt-b">BJJ</span></div>'+
-    '<div class="wk-day"><div class="wk-dn">Thu</div><span class="wk-tag wt-l">Lower</span><span class="wk-tag wt-b">BJJ</span></div>'+
-    '<div class="wk-day"><div class="wk-dn">Fri</div><span class="wk-tag wt-b">Open Mat</span></div>'+
-    '<div class="wk-day"><div class="wk-dn">Sat</div><span class="wk-tag wt-f">Full</span></div>'+
-    '<div class="wk-day"><div class="wk-dn">Sun</div><span class="wk-tag wt-r">Rest</span></div>'+
-    '</div>'+
-    '<div class="sec-head">Your Equipment</div>'+
-    '<div class="p-table"><div class="p-head">Available Kit</div>'+
-    '<div class="p-row"><span>2 × 35lb Dumbbells</span><span class="p-val" style="color:var(--grn)">Primary load</span></div>'+
-    '<div class="p-row"><span>1 × 20lb Dumbbell</span><span class="p-val" style="color:var(--grn)">Isolation work</span></div>'+
-    '<div class="p-row"><span>Doorway Pull-Up Bar</span><span class="p-val" style="color:var(--grn)">All pulling work</span></div>'+
-    '<div class="p-row"><span>Resistance Bands</span><span class="p-val" style="color:var(--grn)">Warm up + face pulls</span></div>'+
-    '<div class="p-row"><span>Chair or Sofa</span><span class="p-val" style="color:var(--grn)">BSS + Nordic + Dips</span></div></div>'+
-    '<div class="sec-head">Key Substitutions</div>'+
-    '<div class="p-table"><div class="p-head">Upper Body</div>'+
-    '<div class="p-row"><span>Towel Weighted Pull-Ups</span><span class="p-val">Towel + 35lb DB between feet</span></div>'+
-    '<div class="p-row"><span>Incline DB Bench</span><span class="p-val">DB Floor Press 2×35lb</span></div>'+
-    '<div class="p-row"><span>Barbell Rows</span><span class="p-val">Single Arm DB Row 35lb</span></div>'+
-    '<div class="p-row"><span>Weighted Dips</span><span class="p-val">Chair Dips + DB on lap</span></div>'+
-    '<div class="p-row"><span>Face Pulls</span><span class="p-val">Band Face Pulls on door</span></div></div>'+
-    '<div class="p-table"><div class="p-head">Lower Body</div>'+
-    '<div class="p-row"><span>Barbell Front Squat</span><span class="p-val">DB Goblet Squat 35lb</span></div>'+
-    '<div class="p-row"><span>Romanian Deadlift</span><span class="p-val">DB RDL 2×35lb = 70lb</span></div>'+
-    '<div class="p-row"><span>Nordic Hamstring Curl</span><span class="p-val">Sofa Nordic — identical</span></div>'+
-    '<div class="p-row"><span>Bulgarian Split Squat</span><span class="p-val">DB BSS 2×35lb = 70lb</span></div></div>'+
-    '<div class="p-table"><div class="p-head">Full Body</div>'+
-    '<div class="p-row"><span>Hang Power Clean</span><span class="p-val">DB Jump Squat 2×35lb</span></div>'+
-    '<div class="p-row"><span>Push Press</span><span class="p-val">DB Push Press 2×35lb</span></div>'+
-    '<div class="p-row"><span>Trap Bar Deadlift</span><span class="p-val">DB Suitcase DL 2×35lb</span></div>'+
-    '<div class="p-row"><span>Farmer\'s Walks</span><span class="p-val">DB Farmer Carry 2×35lb</span></div></div>'+
-    '<div class="info-card"><div class="info-title" style="color:var(--ac)">Progressive Overload at Home</div><div class="info-body">Your dumbbells are fixed weight. Progress through tempo manipulation — slower eccentrics make the same weight harder. Add reps before adding load. Use both 35lb DBs for bilateral work and single 35lb for unilateral. When both 35s feel light for an exercise wear a loaded backpack simultaneously.</div></div>'+
-    '</div>';
+  '<div style="background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px;margin-top:4px">'+
+  '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--ac);margin-bottom:6px">Your Programme</div>'+
+  '<div style="font-size:13px;color:#888;line-height:1.6">Monday Lower · Wednesday Upper · Friday Power. Train fresh — no BJJ yet. Full load all three sessions. 3 to 4 months to build a genuine strength and athleticism foundation before Island Flow starts.</div>'+
+  '</div>'+
+  '<div class="sec">Weekly Structure</div>'+
+  '<div style="background:var(--s1);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:10px">'+
+  mkDayRow('Monday','Lower Body + Core · ~55 min','var(--ac)')+
+  mkDayRow('Tuesday','Rest','var(--bd)')+
+  mkDayRow('Wednesday','Upper Body + Calisthenics · ~55 min','var(--blu)')+
+  mkDayRow('Thursday','Rest','var(--bd)')+
+  mkDayRow('Friday','Power + Skill + Rehab · ~50 min','var(--ora)')+
+  mkDayRow('Saturday','Rest','var(--bd)')+
+  mkDayRow('Sunday','Complete rest','var(--bd)',true)+
+  '</div>'+
+  '<div class="sec">Equipment</div>'+
+  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'+
+  mkEq('2×35lb Dumbbells','Primary load — 70lbs bilateral')+
+  mkEq('1×20lb Dumbbell','Turkish get-ups · curls')+
+  mkEq('Doorway Pull-Up Bar','All pulling and lever work')+
+  mkEq('Resistance Bands','Face pulls · band pull-aparts')+
+  mkEq('Sofa or Chair','Nordic curls · BSS · hip thrust')+
+  mkEq('Towel','Towel pull-ups · grip work')+
+  '</div>'+
+  '<div class="sec">Progressive Overload System</div>'+
+  '<div style="background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px">'+
+  '<div style="font-size:13px;color:#888;line-height:1.7">Since dumbbells cap at 70lbs progression comes from harder exercise variations — not more weight. Every exercise card shows the next harder version. When current variation feels like 1–2 RIR consistently for two sessions — move to the next progression.<br><br><span style="color:var(--ac)">Pull-up ladder —</span> BW → 20lb → 35lb → towel weighted → archer pull-up → one arm assisted<br><br><span style="color:var(--ac)">Pike push-up ladder —</span> feet on sofa → feet higher → wall HSPU negative → wall HSPU → deficit HSPU<br><br><span style="color:var(--ac)">Pistol squat ladder —</span> assisted → unassisted → 20lb DB → 35lb DB<br><br><span style="color:var(--ac)">Dragon flag ladder —</span> tuck → single leg → full → 2 sec pause</div>'+
+  '</div>'+
+  '<div class="sec">RIR Guide</div>'+
+  '<div style="background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:10px">'+
+  '<div style="font-size:13px;color:#888;line-height:1.7"><span style="color:var(--red)">Stop when form breaks</span> — not when you physically cannot continue. On most exercises stop 1–2 reps before true failure. On pull-ups you can push closer to failure — safe to drop off the bar. Never ego-rep through bad form on deadlifts or split squats.</div>'+
+  '</div>'+
+  '<div class="sec">Big Toe Tendinitis Protocol</div>'+
+  '<div style="background:var(--s1);border:1px solid rgba(255,68,68,.3);border-radius:14px;padding:14px;margin-bottom:10px">'+
+  '<div style="font-size:13px;color:#888;line-height:1.7">BSS — front foot FLAT not on toes every session. Calf raises — reduce range if sharp pain at top. Tiptoe farmer walks — drop to flat foot if sharp pain returns. Rehab exercises every Friday without exception. Consistent weekly rehab now prevents chronic issues when BJJ starts and you are on the mats loading your feet daily.</div>'+
+  '</div>'+
+  '</div>';
 }
 
-function fmtR(s){if(s>=60&&s%60===0)return(s/60)+'min';if(s>=60)return Math.floor(s/60)+'m'+(s%60)+'s';return s+'s';}
+function mkDayRow(day,sub,color,last){
+  return '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:'+(last?'none':'1px solid rgba(255,255,255,.04)')+'">' +
+  '<div style="width:8px;height:8px;border-radius:50%;background:'+color+';flex-shrink:0"></div>'+
+  '<div><div style="font-size:13px;font-weight:600;color:var(--tx)">'+day+'</div>'+
+  '<div style="font-size:11px;color:var(--mt);margin-top:1px">'+sub+'</div></div></div>';
+}
+
+function mkEq(name,desc){
+  return '<div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:10px">'+
+  '<div style="font-size:12px;font-weight:600;color:var(--tx);margin-bottom:2px">'+name+'</div>'+
+  '<div style="font-size:10px;color:var(--mt)">'+desc+'</div></div>';
+}
+
+function fmtR(s){
+  if(s>=60&&s%60===0)return(s/60)+'min';
+  if(s>=60)return Math.floor(s/60)+'m'+(s%60)+'s';
+  return s+'s';
+}
 
 function go(s){
-  cur=s;
-  document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active')});
-  document.getElementById('nav-'+s).classList.add('active');
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.nb').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('nb-'+s).classList.add('active');
   render(s);
   document.getElementById('main').scrollTop=0;
 }
 
-function markEx(key,sess){
+function markDone(key,s){
   done[key]=true;
   var card=document.getElementById('ec'+key);
   if(card)card.classList.add('done');
-  var tot=countEx(sess),dn=countDone(sess),pct=Math.round(dn/tot*100);
+  var tot=countEx(s),dn=countDone(s),pct=Math.round(dn/tot*100);
   var fill=document.getElementById('pfill');
-  var lbl=document.getElementById('prog-lbl');
+  var lbl=document.getElementById('plbl');
   if(fill)fill.style.width=pct+'%';
   if(lbl)lbl.textContent=dn+' / '+tot;
-  showN('Done ✓');
-  if(dn===tot)setTimeout(function(){showN('🔥 Session complete!');},800);
+  showN('Exercise done ✓');
+  if(dn===tot)setTimeout(function(){showN('Session complete 🔥');},700);
 }
 
 function startT(secs,next){
   tTotal=secs;tSecs=secs;
-  document.getElementById('tdis').textContent=secs;
+  document.getElementById('tsec').textContent=secs;
   document.getElementById('tnxt').textContent='Next: '+next;
-  document.getElementById('tcirc').style.strokeDashoffset='0';
+  document.getElementById('tarc').style.strokeDashoffset='0';
   document.getElementById('tov').classList.add('show');
   clearInterval(tInt);
   tInt=setInterval(function(){
     tSecs--;
-    document.getElementById('tdis').textContent=tSecs;
-    document.getElementById('tcirc').style.strokeDashoffset=C*(1-tSecs/tTotal);
+    document.getElementById('tsec').textContent=tSecs;
+    document.getElementById('tarc').style.strokeDashoffset=C*(1-tSecs/tTotal);
     if(tSecs<=0){stopT();showN('Rest done — go!');}
   },1000);
 }
@@ -438,10 +449,10 @@ function stopT(){clearInterval(tInt);document.getElementById('tov').classList.re
 function showN(msg){
   var n=document.getElementById('notif');
   n.textContent=msg;n.classList.add('show');
-  setTimeout(function(){n.classList.remove('show');},2500);
+  setTimeout(function(){n.classList.remove('show');},2400);
 }
 
-render('thu');
+render('mon');
 </script>
 </body>
 </html>
